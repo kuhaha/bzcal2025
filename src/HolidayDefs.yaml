@@ -1,0 +1,100 @@
+# holidays by <month> followed by a list of definitions
+# <holiday> ::= <name> <day>|<days> [<applicable>] 
+# <days> ::= <day> | <day> <days> 
+# <day> ::= <dom> | <dow>
+#   <dom> ::= `n`, a specific day, or
+#   <dow> ::= `[w, n1, n2, ..]`, the ni'th day of week (w) for i=1, 2, ...
+# <applicable> ::= [<since> | <between> ] <except> | <in> 
+#   <since> ::= `since n`, any year since n 
+#   <between> ::= `between [n1, n2]`, any year between n1 and n2    
+#   <except> ::= `except [n1, n2, ...]`, any year not in the array
+#   <in> ::= `in [n1, n2, ...]` , any year in the array
+
+1: 
+  - name: NewYearsDay 
+    day: 1
+  - name: ComingOfAgeDay
+    days:
+      - day: 15 
+        between: [1948, 1999]
+      - dow: [2, 1] # 2nd Monday
+        since: 2000
+2: 
+  - name: NationalFoundationDay
+    day: 11
+    since: 1966 
+  - name: EmperorsBirthday
+    day: 23
+    since: 2020
+3: 
+  - name: SpringEquinox
+    func: equinox
+4: 
+  - name: ShowaDay
+    day: 29
+    since: 1989
+  - name: EmperorsBirthday
+    day: 29
+    between: [1910, 1988] 
+5: 
+  - name: CoronationDay
+    day: 1
+    in: [2019]
+  - name: ConstitutionMemorialDay
+    day: 3
+  - name: GreeneryDay
+    day: 4
+  - name: ChildrensDay
+    day: 5
+7: 
+  - name: MarineDay
+    day: [3, 1] # 3rd Monday
+    except: [2020, 2021] 
+  - name: MarineDay
+    days:
+      - day: 22
+        in: [2021]
+      - day: 23
+        in: [2020]
+  - name: SportsDay
+    days:
+      - day: 24
+        in: [2020]
+      - day: 23
+        in: [2021]
+8: 
+  - name: MountainDay
+    days:
+      - day: 11
+        except: [2020, 2021]
+      - day: 8
+        in: [2021]
+      - day: 10
+        in: [2020]
+9: 
+  - name: RespectForTheAgeDay
+    day: [3, 1] # 3rd Monday
+  - name: AutumnalEquinoxDay
+    func: equinox
+10: 
+  - name: HealthSportsDay
+    days:
+      - day: 10
+        between: [1966, 1999]
+      - day: [2,1]
+        between: [2000, 2019]
+  - name: SportsDay
+    day: [2,1]
+    since: 2022
+  - name: EnthronementProclamationCeremony
+    day: 22
+    in: [2019]
+11: 
+  - name: CultureDay
+    day: 3
+  - name: LaborThanksgivingDay
+    day: 23
+12: 
+  - name: EmperorsBirthday
+    day: 23
+    between: [1989, 2018]
