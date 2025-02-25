@@ -34,6 +34,7 @@ class BzMonth
         return new BzMonth($this->y, $this->m + $n);
     }
 
+
     public function diff(BzMonth $other): int
     {
         return ($this->y - $other->y) * 12 + $this->m - $other->m; 
@@ -47,6 +48,14 @@ class BzMonth
     public function day(int $d): BzDay
     {
         return new BzDay($this->y, $this->m, $d);
+    }
+
+    /** days(): generator  */
+    public function days()
+    {
+        for ($d = 1; $d <= $this->lastday; $d++){
+            yield $this->day($d);
+        }
     }
 
     /**

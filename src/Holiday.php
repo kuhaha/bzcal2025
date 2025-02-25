@@ -16,8 +16,8 @@ class Holiday
         $this->bzyear = new BzYear($year, $first_month);
     }
 
-    public static function createFromBzYear(BzYear $bizcal){
-        return new BzYear($bizcal->y, $bizcal->startMonth->m);
+    public static function createFromBzYear(BzYear $bz){
+        return new Holiday($bz->y, $bz->startMonth->m);
     } 
     
     public function holidays(int $month = 0)
@@ -46,7 +46,8 @@ class Holiday
     private function parseYear(array $holiday_defs = []): self
     {
         $holiday_defs = $holiday_defs ? $holiday_defs : BzDef::HOLIDAY_DEF; 
-        for ($mon =$this->bzyear->startMonth; $mon->leq($this->bzyear->lastMonth); $mon=$mon->next()){
+        // for ($mon =$this->bzyear->startMonth; $mon->leq($this->bzyear->lastMonth); $mon=$mon->next()){
+        foreach ($this->bzyear->months() as $mon){
             $year = $mon->y;
             $month = $mon->m;
             $month_defs = $holiday_defs[$month]??[]; 

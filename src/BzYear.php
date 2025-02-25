@@ -26,6 +26,12 @@ class BzYear
         return new BzMonth($year, $m);
     }
 
+    function months()
+    {
+        for ($mon =$this->startMonth; $mon->leq($this->lastMonth); $mon=$mon->next()){
+            yield $mon;
+        }
+    }
     function next(int $n = 1): BzYear
     {
         return new BzYear($this->y + $n, $this->startMonth->m);
