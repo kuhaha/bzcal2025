@@ -34,19 +34,19 @@ class BzMonth
         return new BzMonth($this->y, $this->m + $n);
     }
 
-    public function diff(Month $other): int
+    public function diff(BzMonth $other): int
     {
         return ($this->y - $other->y) * 12 + $this->m - $other->m; 
     }
 
-    public function leq(Month $other): bool
+    public function leq(BzMonth $other): bool
     {
         return $this->diff($other) <= 0;
     }
 
-    public function day(int $d): Day
+    public function day(int $d): BzDay
     {
-        return new Day($this->y, $this->m, $d);
+        return new BzDay($this->y, $this->m, $d);
     }
 
     /**

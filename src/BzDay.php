@@ -52,18 +52,29 @@ class BzDay
         return false;
     }
 
+    /**
+     * check if $this day is between $day1 and $day2
+     */
+    public function between(BzDay $day1, BzDay $day2): bool
+    {
+        return $day1->leq($this) and $this->leq($day2);
+    }
+
+    /**
+     * check if there is exactly one day between $this and $other day
+     */
+    public function sandwich(BzDay $other): mixed
+    {
+        if  ($other->eq($this->next(2))) return $this->next();
+        return false;
+    }
+
     public static function toArray(string $ymd): array
     {
         [$y, $m, $d] = explode('-', $ymd);
         return [(int)$y, (int)$m, (int)$d];
     }   
     
-    public function format(string $fmt='m-d'): string
-    {
-        $t = mktime(0, 0, 0, $this->m, $this->d, $this->y);
-        return date($fmt, $t);
-    }
-
     public function __toString()
     {
         return sprintf(self::YMD_FORMAT, $this->y, $this->m, $this->d);

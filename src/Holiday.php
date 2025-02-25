@@ -1,33 +1,33 @@
 <?php
 namespace ksu\bizcal;
 
-use ksu\bizcal\BizYear;
-use ksu\bizcal\Month;
-use ksu\bizcal\Day;
+use ksu\bizcal\BzYear;
+use ksu\bizcal\BzMonth;
+use ksu\bizcal\BzDay;
 use ksu\bizcal\HolidayDef as BzDef;
 
-class BizHoliday
+class Holiday
 {
     private array $holidays = [];
-    public BizYear $bzcal;
+    public BzYear $bzyear;
 
      public function __construct(int $year, int $first_month)
     {
-        $this->bzcal = new BizYear($year, $first_month);
+        $this->bzyear = new BzYear($year, $first_month);
     }
 
-    public static function createFromBizYear(BizYear $bizcal){
-        return new BizYear($bizcal->y, $bizcal->firstMonth->m);
+    public static function createFromBzYear(BzYear $bizcal){
+        return new BzYear($bizcal->y, $bizcal->startMonth->m);
     } 
     
     public function holidays(int $month = 0)
     {
         if ($month > 0){
-            $cb = function ($ymd) use ($month){
-                [, $m, ] = BizDay::toArray($ymd);
-                return $m==$month;
+            $callback = function ($ymd) use ($month){
+                [, $m, ] = BzDay::toArray($ymd);
+                return $m == $month;
             };
-            return array_filter($this->holidays, $cb, ARRAY_FILTER_USE_KEY);
+            return array_filter($this->holidays, $callback, ARRAY_FILTER_USE_KEY);
         }
         return $this->holidays;
     }
@@ -35,7 +35,7 @@ class BizHoliday
     public function parse(array $holiday_defs = []): self
     {
         $this->holidays = []; //reset holodays
-        $year = $this->bzcal->firstMonth->y;
+        $year = $this->bzyear->startMonth->y;
         if ($year >= BzDef::HOLIDAY_SINCE){
             $holiday_defs = $holiday_defs ? $holiday_defs : BzDef::HOLIDAY_DEF; 
             $this->parseYear($holiday_defs)->suppHolidays()->bridgeHolidays();
@@ -46,7 +46,7 @@ class BizHoliday
     private function parseYear(array $holiday_defs = []): self
     {
         $holiday_defs = $holiday_defs ? $holiday_defs : BzDef::HOLIDAY_DEF; 
-        for ($mon =$this->bzcal->firstMonth; $mon->leq($this->bzcal->lastMonth); $mon=$mon->next()){
+        for ($mon =$this->bzyear->startMonth; $mon->leq($this->bzyear->lastMonth); $mon=$mon->next()){
             $year = $mon->y;
             $month = $mon->m;
             $month_defs = $holiday_defs[$month]??[]; 
@@ -58,12 +58,47 @@ class BizHoliday
         return $this;
     }
 
+    /** 
+     * parse holiday definitions and return an array of holidays for this month 
+     **/
+    private function parseMonth(int $year, int $month, array $month_defs): array
+    {
+        $holidays = [];
+        foreach ($month_defs as $m_def){
+            $id= $m_def[BzDef::_ID];
+            foreach ($m_def[BzDef::_DAYS] ?? [$m_def] as $def){ 
+                if ($this->validate($def, $year) === false) continue;                
+                $day = $this->parseDay($year, $month, $def);                   
+                if ($day > 0){ 
+                    $date = new BzDay($year, $month, $day);
+                    $holidays["$date"] = BzDef::HOLIDAY_NAME[$id];
+                }                        
+            }
+        }
+        return $holidays;
+    }
+
+    /** 
+     * parse day definition and calculate a holiday 
+     **/
+    private function parseDay(int $year, int $month, mixed $def): int 
+    {
+        $biz_month = new BzMonth($year, $month);
+        if (isset($def[BzDef::_DAY]) and is_integer($def[BzDef::_DAY])) return $def[BzDef::_DAY];
+        if (isset($def[BzDef::_DOW]) and is_array($def[BzDef::_DOW])) 
+            return $biz_month->w2d($def[BzDef::_DOW][0], $def[BzDef::_DOW][1]);
+        if (isset($def[BzDef::_FNC]) and $def[BzDef::_FNC]=='equinox')
+            return $this->equinox($month);
+        return -1; 
+    }
+
+
     private function suppHolidays(): self
     {
         $ex_holidays = [];  // 振替休日：substitute holidays for holidays on Sunday
         foreach (array_keys($this->holidays) as $date){
-            $day = BizDay::createFromString($date);
-            if ($day->wday > 0) continue;
+            $day = BzDay::createFromString($date);
+            if ($day->w > 0) continue;
             while($this->isHoliday($day)){
                 $day = $day->next();
             }// "$day" : calls __toString(),for 'yyyy-mm-dd' formatted string
@@ -79,8 +114,8 @@ class BizHoliday
         $ex_holidays = []; // 国民の祝日： bridge holiday sandwiched by two holidays 
         $days = array_keys($this->holidays);
         for ($i=0; $i < count($days)-1; $i++){
-            $day1 = BizDay::createFromString($days[$i]);
-            $day2 = BizDay::createFromString($days[$i+1]);
+            $day1 = BzDay::createFromString($days[$i]);
+            $day2 = BzDay::createFromString($days[$i+1]);
             $day = $day1->sandwich($day2); 
             if ($day){
                 $ex_holidays["$day"] = BzDef::HOLIDAY_NAME['BridgeHoliday'];
@@ -91,43 +126,14 @@ class BizHoliday
         return $this;
     }
 
-    /** 
-     * parse holiday definitions and return an array of holidays for this month 
-     **/
-    private function parseMonth(int $year, int $month, array $month_defs): array
-    {
-        $holidays = [];
-        foreach ($month_defs as $def){
-            if ($this->validate($def, $year) === false) continue;
-            $day = $this->parseDay($year, $month, $def[BzDef::_DAY]);                   
-            if ($day > 0){ 
-                $date = BizDay::toString($year, $month, $day);
-                $holidays[$date] = BzDef::HOLIDAY_NAME[$def[BzDef::_ID]];
-            }                        
-        }
-        return $holidays;
-    }
-
-    /** 
-     * parse day definition and calculate a holiday 
-     **/
-    private function parseDay(int $year, int $month, mixed $day_def): int 
-    {
-        $biz_month = new BizMonth($year, $month);
-        if (is_integer($day_def)) return $day_def;
-        if (is_array($day_def)) return $biz_month->w2mday($day_def[0], $day_def[1]);
-        if (in_array($day_def, ['springEquinox', 'autumnEquinox']))
-            return $this->equinox($day_def);
-        return -1; 
-    }
-
+    
     /** caculate spring and autumn equinox days  
      *  valid for years between 1851 and 2150. return -1 otherwise   
      **/
-    private function equinox(string $holiday='springEquinox') : int
+    private function equinox(int $m) : int
     {
-        $year = $this->bzcal->y;
-        $year = ($holiday=="springEquinox" and 3 < $this->bzcal->firstMonth->m) ? $year + 1 : $year;
+        $year = $this->bzyear->y;
+        $year = ($m==3 and 3 < $this->bzyear->startMonth->m) ? $year + 1 : $year;
         if (!$this->between($year, [1851, 2150])){
             return -1;
         }
@@ -139,14 +145,11 @@ class BizHoliday
         if (self::between($year, [2100, 2150]))
             $delta = [21.8510, 24.2488];
         
-        if (!in_array($holiday, ['springEquinox', 'autumnEquinox'])){
-            throw new \Exception("Unknown holiday : " . $holiday);
-        }    
-        $alpha = ($holiday=='springEquinox') ? $delta[0] : $delta[1];
+        $alpha = ($m==3) ? $delta[0] : $delta[1];
         return (int)floor($alpha + 0.242194 * ($year - 1980) - floor(($year - 1980) / 4));
     } 
 
-    public function isHoliday(BizDay $day): bool
+    public function isHoliday(BzDay $day): bool
     {
         return array_key_exists("$day", $this->holidays);
     }
@@ -160,11 +163,11 @@ class BizHoliday
         if (isset($day_def[BzDef::_BET])){
             $valid = $valid && self::between($year, $day_def[BzDef::_BET]);
         }
-        if (isset($day_def[BzDef::_EXP])){
-            $valid = $valid && !in_array($year, $day_def[BzDef::_EXP]);
+        if (isset($day_def[BzDef::_EXC])){
+            $valid = $valid && !in_array($year, $day_def[BzDef::_EXC]);
         }
-        if (isset($day_def[BzDef::_ONL])){
-            $valid = $valid && in_array($year, $day_def[BzDef::_ONL]);
+        if (isset($day_def[BzDef::_INC])){
+            $valid = $valid && in_array($year, $day_def[BzDef::_INC]);
         }
         return $valid;
     }

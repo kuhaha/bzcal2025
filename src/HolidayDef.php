@@ -15,6 +15,8 @@ class HolidayDef
   const HOLIDAY_SINCE = 1948;
   
   const _ID = 'id';
+  const _DAYS = 'days';
+  const _FNC = 'func';
   const _DAY = 'day';
   const _DOW = 'dow';
   const _SNC = 'since';
@@ -80,7 +82,7 @@ class HolidayDef
     3 => [ 
       [ 
         'id' => 'SpringEquinox',
-        'func' => 'springEquinox',
+        'func' => 'equinox',
       ],
     ],
     4 => [  
@@ -172,7 +174,7 @@ class HolidayDef
       ],
       [ 
         'id' => 'AutumnalEquinoxDay',
-        'func' => 'autumnEquinox',
+        'func' => 'equinox',
       ],
     ],
     10 => [  
