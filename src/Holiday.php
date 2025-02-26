@@ -161,6 +161,9 @@ class Holiday
     private function validate(array $day_def, int $year) : bool
     {
         $valid = true;
+        if (isset($day_def[BzDef::_SNC])){
+            $valid = $valid && $year>=$day_def[BzDef::_SNC];
+        }
         if (isset($day_def[BzDef::_BET])){
             $valid = $valid && self::between($year, $day_def[BzDef::_BET]);
         }

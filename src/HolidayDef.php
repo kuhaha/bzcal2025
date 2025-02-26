@@ -42,6 +42,8 @@ class HolidayDef
     'SportsDay' => 'スポーツの日',
     'CultureDay' => '文化の日',
     'LaborThanksgivingDay' => '勤労感謝の日',
+    'ImperialFuneralDay' => '大喪の礼',
+    'PrinceMarriageDay'=> '結婚の儀',
     'EmperorsBirthday' => '天皇誕生日',
     'EnthronementProclamationCeremony' => '即位礼正殿の儀',
     'CoronationDay' => '天皇の即位の日',
@@ -74,6 +76,11 @@ class HolidayDef
         'since' => 1966
       ], 
       [ 
+        'id' => 'ImperialFuneralDay',
+        'day'=> 24,
+        'in' => [1989]
+      ],
+      [ 
         'id' => 'EmperorsBirthday', # 令和天皇
         'day' => 23,
         'since' => 2020
@@ -85,7 +92,12 @@ class HolidayDef
         'func' => 'equinox',
       ],
     ],
-    4 => [  
+    4 => [
+      [
+        'id'=> 'PrinceMarriageDay',
+        'day' => 10,
+        'in' => [1959]
+      ],  
       [ 
         'id' => 'ShowaDay',
         'day' => 29,
@@ -115,6 +127,13 @@ class HolidayDef
         'id' => 'ChildrensDay',
         'day' => 5
       ],
+    ],
+    6 => [
+      [
+        'id' => 'PrinceMarriageDay',
+        'day' => 9,
+        'in' => [1993]
+      ],  
     ],
     7 =>[ 
       [
