@@ -24,7 +24,7 @@ class Holiday
     {
         if ($month > 0){
             $callback = function ($ymd) use ($month){
-                [, $m, ] = BzDay::toArray($ymd);
+                [, $m, ] = explode('-', $ymd);
                 return $m == $month;
             };
             return array_filter($this->holidays, $callback, ARRAY_FILTER_USE_KEY);
@@ -32,12 +32,12 @@ class Holiday
         return $this->holidays;
     }
 
-    public function parse(array $holiday_defs = []): self
+    public function parse(array $holiday_defs = [], array $holiday_names=[]): self
     {
         $this->holidays = []; //reset holodays
         $year = $this->bzyear->startMonth->y;
         if ($year >= BzDef::HOLIDAY_SINCE){
-            $holiday_defs = $holiday_defs ? $holiday_defs : BzDef::HOLIDAY_DEF; 
+            $holiday_defs = $holiday_defs ? $holiday_defs : BzDef::HOLIDAY_DEF;
             $this->parseYear($holiday_defs)->suppHolidays()->bridgeHolidays();
         }
         return $this;
@@ -66,13 +66,13 @@ class Holiday
     {
         $holidays = [];
         foreach ($month_defs as $m_def){
-            $id= $m_def[BzDef::_ID];
+            $id = $m_def[BzDef::_ID];
             foreach ($m_def[BzDef::_DAYS] ?? [$m_def] as $def){ 
                 if ($this->validate($def, $year) === false) continue;                
                 $day = $this->parseDay($year, $month, $def);                   
                 if ($day > 0){ 
-                    $date = new BzDay($year, $month, $day);
-                    $holidays["$date"] = BzDef::HOLIDAY_NAME[$id];
+                    $date = BzDay::toDate($year, $month, $day);
+                    $holidays[$date] = BzDef::HOLIDAY_NAME[$id];
                 }                        
             }
         }

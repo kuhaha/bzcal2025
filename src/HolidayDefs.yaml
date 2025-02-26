@@ -1,5 +1,5 @@
 # holidays by <month> followed by a list of definitions
-# <holiday> ::= <name> <day>|<days> [<applicable>] 
+# <holiday> ::= <id> <day>|<days> [<applicable>] 
 # <days> ::= <day> | <day> <days> 
 # <day> ::= <dom> | <dow>
 #   <dom> ::= `n`, a specific day, or
@@ -11,59 +11,59 @@
 #   <in> ::= `in [n1, n2, ...]` , any year in the array
 
 1: 
-  - name: NewYearsDay 
+  - id: NewYearsDay 
     day: 1
-  - name: ComingOfAgeDay
+  - id: ComingOfAgeDay
     days:
       - day: 15 
         between: [1948, 1999]
       - dow: [2, 1] # 2nd Monday
         since: 2000
 2: 
-  - name: NationalFoundationDay
+  - id: NationalFoundationDay
     day: 11
     since: 1966 
-  - name: EmperorsBirthday
+  - id: EmperorsBirthday
     day: 23
     since: 2020
 3: 
-  - name: SpringEquinox
+  - id: SpringEquinox
     func: equinox
 4: 
-  - name: ShowaDay
+  - id: ShowaDay
     day: 29
     since: 1989
-  - name: EmperorsBirthday
+  - id: EmperorsBirthday
     day: 29
     between: [1910, 1988] 
 5: 
-  - name: CoronationDay
+  - id: CoronationDay
     day: 1
     in: [2019]
-  - name: ConstitutionMemorialDay
+  - id: ConstitutionMemorialDay
     day: 3
-  - name: GreeneryDay
+  - id: GreeneryDay
     day: 4
-  - name: ChildrensDay
+  - id: ChildrensDay
     day: 5
 7: 
-  - name: MarineDay
+  - id: MarineDay
     day: [3, 1] # 3rd Monday
     except: [2020, 2021] 
-  - name: MarineDay
+  - id: MarineDay
     days:
       - day: 22
         in: [2021]
       - day: 23
         in: [2020]
-  - name: SportsDay
+  - id: SportsDay
     days:
       - day: 24
         in: [2020]
       - day: 23
         in: [2021]
 8: 
-  - name: MountainDay
+  - id: MountainDay
     days:
       - day: 11
         except: [2020, 2021]
@@ -72,29 +72,29 @@
       - day: 10
         in: [2020]
 9: 
-  - name: RespectForTheAgeDay
+  - id: RespectForTheAgeDay
     day: [3, 1] # 3rd Monday
-  - name: AutumnalEquinoxDay
+  - id: AutumnalEquinoxDay
     func: equinox
 10: 
-  - name: HealthSportsDay
+  - id: HealthSportsDay
     days:
       - day: 10
         between: [1966, 1999]
       - day: [2,1]
         between: [2000, 2019]
-  - name: SportsDay
+  - id: SportsDay
     day: [2,1]
     since: 2022
-  - name: EnthronementProclamationCeremony
+  - id: EnthronementProclamationCeremony
     day: 22
     in: [2019]
 11: 
-  - name: CultureDay
+  - id: CultureDay
     day: 3
-  - name: LaborThanksgivingDay
+  - id: LaborThanksgivingDay
     day: 23
 12: 
-  - name: EmperorsBirthday
+  - id: EmperorsBirthday
     day: 23
     between: [1989, 2018]

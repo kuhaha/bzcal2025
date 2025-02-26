@@ -25,7 +25,8 @@ class BzDay
    
     public static function createFromString(string $ymd): BzDay
     {
-        return self::createFromArray(self::toArray($ymd));
+        $arr = explode('-', $ymd);
+        return self::createFromArray($arr);
     }
    
     public function next(int $n = 1): BzDay
@@ -69,14 +70,13 @@ class BzDay
         return false;
     }
 
-    public static function toArray(string $ymd): array
+    public static function toDate($y, $m, $d)
     {
-        [$y, $m, $d] = explode('-', $ymd);
-        return [(int)$y, (int)$m, (int)$d];
-    }   
-    
+        return sprintf(self::YMD_FORMAT, $y, $m, $d);
+    }
+   
     public function __toString()
     {
-        return sprintf(self::YMD_FORMAT, $this->y, $this->m, $this->d);
+        return self::toDate($this->y, $this->m, $this->d);
     }
 }

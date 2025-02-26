@@ -25,7 +25,7 @@ class BzMonth
    
     public static function createFromString(string $ym): BzMonth
     {
-        $arr = self::toArray($ym);
+        $arr = explode('-', $ym);
         return self::createFromArray($arr);
     }
   
@@ -33,7 +33,6 @@ class BzMonth
     {
         return new BzMonth($this->y, $this->m + $n);
     }
-
 
     public function diff(BzMonth $other): int
     {
@@ -45,12 +44,29 @@ class BzMonth
         return $this->diff($other) <= 0;
     }
 
-    public function day(int $d): BzDay
+    public function week(int $n = 1): BzWeek
+    {
+        $w = $this->firstwday;
+        $day = $this->day()->next(- $w);// first sunday
+        return new BzWeek($day->next(7*$n-7));
+    }
+
+    public function weeks()
+    {
+        foreach (range(1,5) as $n){
+            $_week = $this->week($n);
+            $_lastDay = $this->day($this->lastday);
+            if ($_week->startDay->leq($_lastDay))
+                yield $_week; 
+        }        
+    }
+
+    public function day(int $d = 1): BzDay
     {
         return new BzDay($this->y, $this->m, $d);
     }
 
-    /** days(): generator  */
+    /** days(): day generator of this month  */
     public function days()
     {
         for ($d = 1; $d <= $this->lastday; $d++){
@@ -90,14 +106,14 @@ class BzMonth
         return $days;
     }
 
-    public static function toArray(string $ym): array
-    {
-        [$y, $m] = explode('-', $ym);
-        return [(int)$y,(int)$m];
-    }
+    // public static function toArray(string $ym): array
+    // {
+    //     [$y, $m] = explode('-', $ym);
+    //     return [(int)$y,(int)$m];
+    // }
 
     public function __toString(): string
     {
-        return  sprintf (self::YM_FORMAT, $this->y, $this->m);
+        return  sprintf(self::YM_FORMAT, $this->y, $this->m);
     }
 }

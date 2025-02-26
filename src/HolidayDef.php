@@ -15,10 +15,10 @@ class HolidayDef
   const HOLIDAY_SINCE = 1948;
   
   const _ID = 'id';
-  const _DAYS = 'days';
-  const _FNC = 'func';
   const _DAY = 'day';
   const _DOW = 'dow';
+  const _FNC = 'func';
+  const _DAYS = 'days';
   const _SNC = 'since';
   const _BET = 'between';
   const _INC = 'in';

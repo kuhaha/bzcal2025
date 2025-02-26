@@ -43,11 +43,42 @@ echo "{$mon}, {$mon->firstwday}, {$mon->lastday}", PHP_EOL;
 echo "'{$mon}' is {$mon->diff($mon1)} months after '{$mon1}'", PHP_EOL;
 
 echo $str_hline;
+echo "Year::Week", PHP_EOL;
+echo "\$cal->weeks(): ", PHP_EOL;
+foreach ($cal->weeks() as $week){
+    echo "[{$week->startDay}, {$week->lastDay}]", PHP_EOL;
+}
+
+echo $str_hline;
+echo "Month::Week", PHP_EOL;
+
+echo "\$mon->week(\$n): loop", PHP_EOL;
+foreach (range(1,6) as $n){
+    $week = $mon->week($n);
+    echo "[{$week->startDay}, {$week->lastDay}]", PHP_EOL; 
+}
+
+echo "\$mon->weeks(): generator", PHP_EOL;
+foreach ($mon->weeks() as $week){
+    echo "[{$week->startDay}, {$week->lastDay}]", PHP_EOL;
+}
+
+echo $str_hline;
 $day = $mon->day(10);
+echo "Month::Day", PHP_EOL;
 echo "\$day = \$mon->day(10)";
 echo " = {$day}, {$day->w}", PHP_EOL;
 
 $day = $mon->day(33);
 echo "\$day = \$mon->day(33)";
 echo " = {$day}, {$day->w}", PHP_EOL;
+
+echo $str_hline;
+$mon = $cal->month(1);
+$day = $mon->day();
+echo "Anyday: {$day}, {$day->w}", PHP_EOL;
+$day = $day->next(-$day->w);
+echo "Sunday: {$day}, {$day->w}", PHP_EOL;
+
+
 
