@@ -3,7 +3,7 @@ namespace ksu\bizcal;
 
 class BzYear
 {
-    const YR_FORMAT = "[%s, %s]";
+    const DATE_FORMAT_Y2Y = "[%s, %s]";
     public int $y;
     public BzMonth $startMonth;
     public BzMonth $lastMonth;
@@ -16,6 +16,11 @@ class BzYear
         $this->y = $year;
         $this->startMonth = new BzMonth($year, $m);
         $this->lastMonth = new BzMonth($year, $m + 11);
+    }
+
+    function next(int $n = 1): BzYear
+    {
+        return new BzYear($this->y + $n, $this->startMonth->m);
     }
 
     function month(int $m = 1): BzMonth
@@ -44,13 +49,8 @@ class BzYear
         } 
     }
 
-    function next(int $n = 1): BzYear
-    {
-        return new BzYear($this->y + $n, $this->startMonth->m);
-    }
-
     public function __toString()
     {
-        return sprintf(self::YR_FORMAT, $this->startMonth, $this->lastMonth);
+        return sprintf(self::DATE_FORMAT_Y2Y, $this->startMonth, $this->lastMonth);
     }
 }

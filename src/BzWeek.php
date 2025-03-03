@@ -3,6 +3,8 @@ namespace ksu\bizcal;
 
 class BzWeek
 {
+    use RangeXYZ;
+    
     public BzDay $startDay; 
     public BzDay $lastDay; 
 

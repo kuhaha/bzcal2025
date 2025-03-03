@@ -3,7 +3,7 @@ namespace ksu\bizcal;
 
 class BzDay
 {
-    const YMD_FORMAT = "%d-%02d-%02d";
+    const DATE_FORMAT_YMD = "%d-%02d-%02d";
     public int $y; 
     public int $m;
     public int $d;
@@ -72,7 +72,7 @@ class BzDay
 
     public static function toDate($y, $m, $d)
     {
-        return sprintf(self::YMD_FORMAT, $y, $m, $d);
+        return sprintf(self::DATE_FORMAT_YMD, $y, $m, $d);
     }
    
     public function __toString()

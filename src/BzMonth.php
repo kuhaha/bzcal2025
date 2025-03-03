@@ -3,7 +3,7 @@ namespace ksu\bizcal;
 
 class BzMonth 
 {
-    const YM_FORMAT = "%d-%02d";
+    const DATE_FORMAT_YM = "%d-%02d";
     public int $y; 
     public int $m;
     public int $firstwday;
@@ -54,10 +54,10 @@ class BzMonth
     public function weeks()
     {
         foreach (range(1,5) as $n){
-            $_week = $this->week($n);
-            $_lastDay = $this->day($this->lastday);
-            if ($_week->startDay->leq($_lastDay))
-                yield $_week; 
+            $week = $this->week($n);
+            $lastday = $this->day($this->lastday);
+            if ($week->startDay->leq($lastday))
+                yield $week; 
         }        
     }
 
@@ -106,14 +106,8 @@ class BzMonth
         return $days;
     }
 
-    // public static function toArray(string $ym): array
-    // {
-    //     [$y, $m] = explode('-', $ym);
-    //     return [(int)$y,(int)$m];
-    // }
-
     public function __toString(): string
     {
-        return  sprintf(self::YM_FORMAT, $this->y, $this->m);
+        return  sprintf(self::DATE_FORMAT_YM, $this->y, $this->m);
     }
 }

@@ -1,8 +1,15 @@
 Calendar
-Year
-Month
-Day
+Year extends RangeZ, months/weeks/days
+Month extends RangeZ, weeks/days
+Day extends RangeZ, hours/minuts/seconds
+
 Holiday
+
+RangeZ
+  zrange ()
+    - start
+    - limit
+    - step
 
 DayFilter
   comparison
