@@ -46,13 +46,11 @@ class Holiday
     private function parseYear(array $holiday_defs = []): self
     {
         $holiday_defs = $holiday_defs ? $holiday_defs : BzDef::HOLIDAY_DEF; 
-        // for ($mon =$this->bzyear->startMonth; $mon->leq($this->bzyear->lastMonth); $mon=$mon->next()){
         foreach ($this->bzyear->months() as $mon){
-            $year = $mon->y;
-            $month = $mon->m;
-            $month_defs = $holiday_defs[$month]??[]; 
-            if (!$month_defs) continue;
-            $month_holidays = $this->parseMonth($year, $month, $month_defs);
+            $y = $mon->y;
+            $m = $mon->m;
+            if ( !isset($holiday_defs[$m])) continue;
+            $month_holidays = $this->parseMonth($y, $m, $holiday_defs[$m]);
             $this->holidays = array_merge($this->holidays, $month_holidays);
         }
         ksort($this->holidays);
