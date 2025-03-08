@@ -10,14 +10,14 @@ class BzYear
     public BzMonth $startMonth;
     public BzMonth $lastMonth;
 
-    function __construct(int $year, int $m = 1)
+    function __construct(int $y, int $m = 1)
     {
         ($m > 0 and $m < 13) or 
             new \InvalidArgumentException("Month must be btween 1 to 12!");
 
-        $this->y = $year;
-        $this->startMonth = new BzMonth($year, $m);
-        $this->lastMonth = new BzMonth($year, $m + 11);
+        $this->y = $y;
+        $this->startMonth = new BzMonth($y, $m);
+        $this->lastMonth = new BzMonth($y, $m + 11);
     }
 
     function next(int $n = 1): BzYear
