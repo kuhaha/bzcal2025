@@ -13,9 +13,9 @@ header("Content-Type: text/plain");
 [$y, $m] = [2031, 4];
 $cal = new BzYear($y, $m);
 echo $cal, PHP_EOL;
-foreach (range(1,4) as $n){
-    $_cal = $cal->next($n);
-    echo $_cal, PHP_EOL;
+foreach (range(1, 4) as $n){
+    $y_cal = $cal->next($n);
+    echo $y_cal, PHP_EOL;
 }
 
 echo $str_hline;
@@ -29,7 +29,6 @@ foreach (range(1,16) as $i){
 
 echo $str_hline;
 echo "\$mon = BzMonth::createFromArray([2024, 4])", PHP_EOL;
-
 $mon = BzMonth::createFromArray([2024, 4]);
 echo "{$mon}, {$mon->firstwday}, {$mon->lastday}", PHP_EOL;
 
@@ -37,7 +36,6 @@ $mon1 = $mon;
 
 echo $str_hline;
 echo "\$mon = BzMonth::createFromString('2025-10')", PHP_EOL;
-
 $mon = BzMonth::createFromString('2025-10');
 echo "{$mon}, {$mon->firstwday}, {$mon->lastday}", PHP_EOL;
 echo "'{$mon}' is {$mon->diff($mon1)} months after '{$mon1}'", PHP_EOL;
@@ -51,7 +49,6 @@ foreach ($cal->weeks() as $week){
 
 echo $str_hline;
 echo "Month::Week", PHP_EOL;
-
 echo "\$mon->week(\$n): loop", PHP_EOL;
 foreach (range(1,6) as $n){
     $week = $mon->week($n);
@@ -64,13 +61,20 @@ foreach ($mon->weeks() as $week){
 }
 
 echo $str_hline;
+echo "First week of month '{$mon}'", PHP_EOL;
+foreach ($mon->week(1)->days() as $day){
+    echo "'{$day}', {$day->w}", PHP_EOL;
+}
+
+echo $str_hline;
 $day = $mon->day(10);
 echo "Month::Day", PHP_EOL;
-echo "\$day = \$mon->day(10)";
+echo "Month='{$mon}'", PHP_EOL;
+echo "\$mon->day(10)";
 echo " = {$day}, {$day->w}", PHP_EOL;
 
+echo "\$mon->day(33)";
 $day = $mon->day(33);
-echo "\$day = \$mon->day(33)";
 echo " = {$day}, {$day->w}", PHP_EOL;
 
 echo $str_hline;
@@ -79,6 +83,3 @@ $day = $mon->day();
 echo "Anyday: {$day}, {$day->w}", PHP_EOL;
 $day = $day->next(-$day->w);
 echo "Sunday: {$day}, {$day->w}", PHP_EOL;
-
-
-

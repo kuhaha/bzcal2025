@@ -1,6 +1,8 @@
 <?php
 namespace ksu\bizcal;
 
+use Generator;
+
 class BzWeek
 {
     use RangeXYZ;
@@ -14,21 +16,19 @@ class BzWeek
         $this->startDay = $day->next(- $day->w); // reset to Sunday  
         $this->lastDay = $this->startDay->next(6);
     }
-
-    public static function create(int $year, int $month, int $day): BzWeek
-    {
-        $day = new BzDay( $year, $month, $day); 
-        return new BzWeek($day);
-    }
-
-    public static function createFromArray(array $arr): BzWeek
-    {
-        return new BzWeek($arr[0], $arr[1], $arr[2]);
-    }
    
     public static function createFromString(string $ymd): BzWeek
     {
         $arr = explode('-', $ymd);
-        return self::createFromArray($arr);
+        return new BzWeek(BzDay::createFromArray($arr));
     }
+
+    /** days(): day generator of this month  */
+    public function days(): Generator
+    {
+        for ($day = $this->startDay; $day->leq($this->lastDay); $day=$day->next()){
+            yield $day;
+        }
+    }
+
 }
