@@ -71,7 +71,7 @@ class Holiday
                 if ($this->validate($def, $year) === false) continue;                
                 $day = $this->parseDay($year, $month, $def);                   
                 if ($day > 0){ 
-                    $date = BzDay::toDate($year, $month, $day);
+                    $date = BzDay::toString($year, $month, $day);
                     $holidays[$date] = BzDef::HOLIDAY_NAME[$id];
                 }                        
             }

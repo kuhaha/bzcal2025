@@ -1,6 +1,8 @@
 <?php
 namespace ksu\bizcal;
 
+use Generator;
+
 class BzYear
 {
     const DATE_FORMAT_Y2Y = "[%s, %s]";
@@ -32,19 +34,19 @@ class BzYear
     }
 
     /** months(): month generator of this year  */
-    function months()
+    function months(): Generator
     {
         for ($mon =$this->startMonth; $mon->leq($this->lastMonth); $mon=$mon->next()){
             yield $mon;
         }
     }
 
-    public function weeks()
+    public function weeks(): Generator
     {
         $day1 = $this->startMonth->day();
-        $d = $this->lastMonth->lastday;
-        $day2 = $this->lastMonth->day($d);
-        for ($day=$day1->next(- $day1->w); $day->leq($day2); $day=$day->next(7)){
+        $last = $this->lastMonth->lastday;
+        $day2 = $this->lastMonth->day($last);
+        for ($day = $day1; $day->leq($day2); $day = $day->next(7)){
             yield new BzWeek($day);
         } 
     }

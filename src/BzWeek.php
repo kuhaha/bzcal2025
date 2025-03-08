@@ -8,6 +8,7 @@ class BzWeek
     public BzDay $startDay; 
     public BzDay $lastDay; 
 
+    // create a week that contains the given `$day` 
     function __construct(BzDay $day)
     {
         $this->startDay = $day->next(- $day->w); // reset to Sunday  

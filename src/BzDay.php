@@ -70,13 +70,13 @@ class BzDay
         return false;
     }
 
-    public static function toDate($y, $m, $d)
+    public static function toString($y, $m, $d)
     {
         return sprintf(self::DATE_FORMAT_YMD, $y, $m, $d);
     }
    
     public function __toString()
     {
-        return self::toDate($this->y, $this->m, $this->d);
+        return self::toString($this->y, $this->m, $this->d);
     }
 }

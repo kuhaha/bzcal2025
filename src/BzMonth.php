@@ -1,6 +1,8 @@
 <?php
 namespace ksu\bizcal;
 
+use Generator;
+
 class BzMonth 
 {
     const DATE_FORMAT_YM = "%d-%02d";
@@ -14,8 +16,8 @@ class BzMonth
         $t = mktime(0, 0, 0, $month, 1, $year);        
         $this->y = date('Y', $t);
         $this->m = date('n', $t);
-        $this->lastday = date('t', $t);
         $this->firstwday = date('w', $t);
+        $this->lastday = date('t', $t);
     }
 
     public static function createFromArray(array $arr): BzMonth
@@ -46,12 +48,11 @@ class BzMonth
 
     public function week(int $n = 1): BzWeek
     {
-        $w = $this->firstwday;
-        $day = $this->day()->next(- $w);// first sunday
+        $day = $this->day();
         return new BzWeek($day->next(7*$n-7));
     }
 
-    public function weeks()
+    public function weeks(): Generator
     {
         foreach (range(1,5) as $n){
             $week = $this->week($n);

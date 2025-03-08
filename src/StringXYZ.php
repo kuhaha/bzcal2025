@@ -1,6 +1,6 @@
 <?php
 
-trait StringXYZ
+class StringXYZ
 {
     const DATE_TIMEZONE = "Asia/Tokyo";
     const DATE_FORMAT_YMD = 'y-m-d';

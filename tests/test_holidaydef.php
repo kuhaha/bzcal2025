@@ -25,7 +25,7 @@ echo $str_hline;
 $holiday = new Holiday($y, $m);
 echo $holiday->bzyear, PHP_EOL;
 echo "{$y}年度", PHP_EOL;
-$holidays = $holiday->parse($holidaydefs)->holidays();
+$holidays = $holiday->parse($holidaydefs, $holidaynames)->holidays();
 print_r($holidays);
 
 echo "5月", PHP_EOL;
