@@ -50,6 +50,25 @@ class BzYear
             yield new BzWeek($day);
         } 
     }
+    public function firstDay() : BzDay 
+    {
+        return $this->startMonth->day();    
+    }
+    public function lastDay() : BzDay 
+    {
+        return $this->lastMonth->day(-1);    
+    }
+    
+
+    public function days(BzDay $s, BzDay $t) : Generator 
+    {
+        $s = $s->leq($this->firstDay()) ? $this->firstDay(): $s;
+        $t = $this->lastDay()->leq($t) ? $this->lastDay(): $t;
+        for ($day=$s; $day->leq($t); $day=$day->next()){
+            yield $day;
+        }
+
+    }
 
     public function __toString()
     {
